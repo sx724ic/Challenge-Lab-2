@@ -1,0 +1,20 @@
+EXT 0X00 //override sign extension
+MOV R1 #255
+EXT 0x00 //override sign extension
+MOV R2 #255
+MOV R3 R2 //op2_shifted (lsbits)
+MOV R4 #0 //op2_shifted (msbits)
+MOV R5 #0 //sum (lsb)
+MOV R6 #0 //sum (msb)
+CMP R1 #0 //check if op1 =0
+JCC 11 //if op1=0 jump
+MOV R0 #1 //set = 1 for AND
+AND R7 R0 R1 //check if even
+MOV R7 R7 //check if last digit is 0
+JEQ 3 //if last digit is 0 skip 2 lines
+ADD R5 R5 R3 //lsbits of op2shifted into least significant bits of sum
+ADC R6 R4 //lsbits of op2shifted into least significant bits of sum with carry of previous 
+LSL R3 R3 #1 //1sb op2 x 2
+ADC R4 #0 //adds the bit shifted out of the previous instruction
+LSR R1 R1 #1 //op2 /2
+JMP -11

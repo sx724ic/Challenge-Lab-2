@@ -1,0 +1,39 @@
+MOV R0 #120 //stores multiplier
+MOV R1 #120 //stores multiplicand
+MOV R2, #0 //least signficant bits of the answer
+MOV R3, #0 //most significant bits of answer
+MOV R5, #0 //stores 0 as the most significant bits of multiplicand
+LSR R0, R0, #1 //check if least significant bit of 1
+JCS 15 //jumps to cases 01 or 11 if LSB of R0 is 1
+LSR R0, R0 #1 //check if next significant bit is 1
+JCS 6 //jumps to case 10 if second LSB of R0 is 1
+ADD R1, R1, R1 //case 00 shifts the values of R4 twice 
+ADC R5, R5, R5 //must add carry onto R5 per shift
+ADD R1, R1, R1 //no alter to R2, R3 since "0" so technically not multiplying
+ADC R5, R5, R5
+JMP -8 //jumps back to test next least signifcant bits
+ADD R1, R1, R1 //case 10 shifts left once (0 part)
+ADC R5, R5, R5
+ADD R2, R1, R2 //then adds the values onto R2 and R3 (1 part)
+ADC R3, R5, R3 
+ADD R1, R1, R1 //must always shift twice since always takes account 2 bits
+ADC R5, R5, R5
+JMP -15 //jumps back to test next least signifcant bits
+LSR R0, R0, #1 //checks if second least signifcnant bit now is a 1
+JCS 8
+ADD R2, R1, R2 //case 01 adds value onto R2 and R3 (1 part)
+ADC R3, R5, R3
+ADD R1, R1, R1 //shifts compulsary shift twice (0 part)
+ADC R5, R5, R5
+ADD R1, R1, R1
+ADC R5, R5, R5
+JMP -24 //jumps back to test next least signifcant bits
+ADD R2, R1, R2 //case 11 adds values onto R2 and R3, shifts then repeats 
+ADC R3, R5, R3
+ADD R1, R1, R1
+ADC R5, R5, R5
+ADD R2, R1, R2
+ADC R3, R5, R3
+ADD R1, R1, R1
+ADC R5, R5, R5
+JMP -33 //jumps back to test next least signifcant bits

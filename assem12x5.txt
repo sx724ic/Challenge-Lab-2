@@ -1,0 +1,14 @@
+MOV R3 #0 //sum = R3
+MOV R4 #1 // set = 1 for AND
+MOV R0 #12 //op1 = r0
+MOV R1 #5 //op2 = R1
+MOV R2 R1 //op2_shifted = R2
+MOV R0 R0 //check if op1 = 0 (sets flagZ)
+JEQ 8 //jumps if op1 = 0
+AND R5 R0 R4 //check if even
+MOV R5 R5 //check if last digit is 0
+JEQ 2 //if last digit is 0 skip 1 line
+ADD R3 R3 R2 //add op2 shifted to sum
+LSL R2 R2 #1 //multiply by 2
+LSR R0 R0 #1 //divide by 2
+JMP -8 //continues while loop
